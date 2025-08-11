@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventario y Disponibilidad</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">📦</span>
+      <h1>Inventario y Disponibilidad</h1>
+    </div>
+    <div class="controls">
+      <div class="search">
+        <input id="q" type="search" placeholder="Buscar por nombre o SKU…" aria-label="Buscar" />
+      </div>
+      <div class="date-filters">
+        <select id="datePresetMobile" class="date-presets-mobile">
+          <option value="hoy">Hoy</option>
+          <option value="semana">Semana</option>
+          <option value="mes">Mes</option>
+          <option value="trimestre">Trimestre</option>
+        </select>
+        <input id="from" type="date" aria-label="Desde" />
+        <input id="to" type="date" aria-label="Hasta" />
+        <div class="presets">
+          <button data-preset="hoy">Hoy</button>
+          <button data-preset="semana">Semana</button>
+          <button data-preset="mes">Mes</button>
+          <button data-preset="trimestre">Trimestre</button>
+        </div>
+      </div>
+      <div class="theme">
+        <button id="toggleTheme" aria-pressed="false" title="Cambiar tema">Claro/Oscuro</button>
+        <div class="palette">
+          <label>Primario <input id="primaryColor" type="color" value="#2B6CB0" /></label>
+          <label>Acento <input id="accentColor" type="color" value="#D69E2E" /></label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="dashboard">
+      <div class="kpi-card" id="kpiCriticos">
+        <h3>Ítems críticos</h3>
+        <p class="kpi-value">0</p>
+      </div>
+      <div class="kpi-card" id="kpiRiesgo">
+        <h3>Ítems en riesgo</h3>
+        <p class="kpi-value">0</p>
+      </div>
+      <div class="kpi-card" id="kpiVariacion">
+        <h3>Variación disponible</h3>
+        <p class="kpi-value">0</p>
+      </div>
+      <div class="kpi-card" id="kpiCompromisos">
+        <h3>Compromisos pendientes</h3>
+        <p class="kpi-value">0</p>
+      </div>
+    </section>
+
+    <section class="filters-row">
+      <div class="selects">
+        <label>
+          Categoría
+          <select id="category">
+            <option value="">Todas</option>
+          </select>
+        </label>
+      </div>
+      <div class="toggles">
+        <label><input type="checkbox" id="onlyAlerts" /> Solo alertas</label>
+      </div>
+    </section>
+
+    <section class="table-wrap" aria-live="polite">
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th data-sort="nombre">Producto</th>
+            <th data-sort="disponible">Disponible</th>
+            <th data-sort="reservado">Reservado</th>
+            <th data-sort="inventario_real">Inventario</th>
+            <th data-sort="compromisos">Compromisos</th>
+            <th data-sort="estado">Estado</th>
+            <th data-sort="ultima_actualizacion">Última actualización</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="itemsBody">
+          <!-- rows renderizadas por JS -->
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </section>
+  </main>
+
+  <dialog id="historyDialog" aria-labelledby="historyTitle">
+    <form method="dialog" class="dialog-head">
+      <h3 id="historyTitle">Historial</h3>
+      <button value="close" aria-label="Cerrar">✕</button>
+    </form>
+    <div class="history-filters">
+      <select id="historyType">
+        <option value="">Todos</option>
+        <option value="pedido">Pedido</option>
+        <option value="recepcion">Recepción</option>
+        <option value="despacho">Despacho</option>
+        <option value="consumo">Consumo</option>
+        <option value="merma">Merma</option>
+        <option value="traslado_entrante">Traslado entrante</option>
+        <option value="traslado_saliente">Traslado saliente</option>
+        <option value="ajuste">Ajuste</option>
+      </select>
+      <input id="historyFrom" type="date" />
+      <input id="historyTo" type="date" />
+    </div>
+    <ul id="historyList" class="history-list" aria-live="polite"></ul>
+  </dialog>
+
+  <footer class="app-footer">
+    <small>© Tu empresa</small>
+  </footer>
+
+  <script src="assets/mock.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
