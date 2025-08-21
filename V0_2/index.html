@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gestión de Almacén</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    </head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">📦 Gestión de Almacén</div>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Período de Tiempo</label>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" onclick="setTimePeriod('today')">Hoy</button>
+                            <button class="filter-btn" onclick="setTimePeriod('week')">Esta Semana</button>
+                            <button class="filter-btn" onclick="setTimePeriod('month')">Este Mes</button>
+                            <button class="filter-btn" onclick="setTimePeriod('custom')">Personalizado</button>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Fecha Inicio</label>
+                        <input type="date" class="filter-input" id="startDate">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Fecha Fin</label>
+                        <input type="date" class="filter-input" id="endDate">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Buscar Mercancía</label>
+                        <input type="text" class="filter-input" placeholder="Nombre del producto..." id="searchProduct" oninput="filterTable()">
+                    </div>
+                </div>
+            </section>
+
+            <section class="cards-grid">
+                <div class="card" onclick="filterByCard('received')" data-filter="received">
+                    <div class="card-header">
+                        <div class="card-title">Órdenes Recibidas</div>
+                    </div>
+                    <div class="card-value" id="ordersReceived">156</div>
+                    <div class="card-change positive">+12% vs período anterior</div>
+                </div>
+                <div class="card" onclick="filterByCard('dispatched')" data-filter="dispatched">
+                    <div class="card-header">
+                        <div class="card-title">Órdenes Despachadas</div>
+                    </div>
+                    <div class="card-value" id="ordersDispatched">142</div>
+                    <div class="card-change positive">+8% vs período anterior</div>
+                </div>
+                <div class="card" onclick="filterByCard('pending')" data-filter="pending">
+                    <div class="card-header">
+                        <div class="card-title">Órdenes Pendientes</div>
+                    </div>
+                    <div class="card-value" id="ordersPending">14</div>
+                    <div class="card-change warning">3 críticas</div>
+                </div>
+                <div class="card" onclick="filterByCard('lowStock')" data-filter="lowStock">
+                    <div class="card-header">
+                        <div class="card-title">Productos Baja Disponibilidad</div>
+                    </div>
+                    <div class="card-value warning" id="lowStock">8</div>
+                    <div class="card-change negative">Requiere atención</div>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h2 class="table-title">Inventario de Mercancías</h2>
+                    <button class="reset-filters-btn" id="resetFiltersBtn" onclick="resetFilters()">
+                        Limpiar Filtros
+                    </button>
+                </div>
+
+                <div class="table-controls">
+                    <div class="column-controls">
+                        <div class="column-dropdown">
+                            <button class="column-toggle-btn" onclick="toggleColumnDropdown()">
+                                ⚙️ Configurar Columnas
+                            </button>
+                            <div class="column-dropdown-content" id="columnDropdown">
+                                <div class="column-checkbox" onclick="toggleColumn(0)">
+                                    <input type="checkbox" id="col-0" checked>
+                                    <label for="col-0">Producto</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(1)">
+                                    <input type="checkbox" id="col-1" checked>
+                                    <label for="col-1">Disponibilidad</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(2)">
+                                    <input type="checkbox" id="col-2" checked>
+                                    <label for="col-2">Existencia</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(3)">
+                                    <input type="checkbox" id="col-3" checked>
+                                    <label for="col-3">Compra</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(4)">
+                                    <input type="checkbox" id="col-4" checked>
+                                    <label for="col-4">Traslados In/Out</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(5)">
+                                    <input type="checkbox" id="col-5" checked>
+                                    <label for="col-5">Mermas</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(6)">
+                                    <input type="checkbox" id="col-6" checked>
+                                    <label for="col-6">Consumo Interno</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(7)">
+                                    <input type="checkbox" id="col-7" checked>
+                                    <label for="col-7">Ajustes Inventario</label>
+                                </div>
+                                <div class="column-checkbox" onclick="toggleColumn(8)">
+                                    <input type="checkbox" id="col-8" checked>
+                                    <label for="col-8">Historia</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pagination-controls">
+                        <div class="pagination-info" id="paginationInfo">
+                            Mostrando 1-25 de 100 registros
+                        </div>
+                        <select class="pagination-select" id="itemsPerPage" onchange="changeItemsPerPage()">
+                            <option value="10">10 por página</option>
+                            <option value="25" selected>25 por página</option>
+                            <option value="50">50 por página</option>
+                            <option value="100">100 por página</option>
+                        </select>
+                        <div class="pagination-buttons" id="paginationButtons">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="table" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)" data-column="0">Producto <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(1)" data-column="1">Disponibilidad <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(2)" data-column="2">Existencia <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(3)" data-column="3">Compra <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(4)" data-column="4">Traslados In/Out <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(5)" data-column="5">Mermas <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(6)" data-column="6">Consumo Interno <span class="sort-icon">↕️</span></th>
+                                <th onclick="sortTable(7)" data-column="7">Ajustes Inventario <span class="sort-icon">↕️</span></th>
+                                <th data-column="8">Historia <span class="sort-icon">📋</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Historia del Producto</h3>
+                <button class="close-btn" onclick="closeHistoryModal()">&times;</button>
+            </div>
+            <div class="history-timeline" id="historyTimeline">
+            </div>
+        </div>
+    </div>
+<script src="assets/app.js"></script>
